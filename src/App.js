@@ -1,25 +1,54 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
+import {loginSuccess, logoutSuccess} from './features/authSlice';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import {fetchUser} from "./services/api";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+    // useEffect(() => {
+    //     const getTokenAndFetchUser = () => {
+    //         const token = localStorage.getItem('token');
+    //         if (token) {
+    //             fetchUser(token)
+    //                 .then(response => {
+    //                     const user = response.data;
+    //                 })
+    //                 .catch(error => {
+    //                     console.error('Login error:', error);
+    //                 });
+    //         }
+    //     };
+    //     if (typeof window !== 'undefined') {
+    //         getTokenAndFetchUser();
+    //     }
+    // }, [dispatch, fetchUser]);
+    console.log("isAuthenticated", isAuthenticated);
+    return (
+        <Router>
+            <div className="App">
+                <Header/>
+                <main>
+                    <Routes>
+                        <Route path="/register"
+                               element={isAuthenticated ? <Navigate to="/profile"/> : <RegisterPage/>}/>
+                        <Route path="/login" element={isAuthenticated ? <Navigate to="/profile"/> : <LoginPage/>}/>
+                        <Route path="/profile" element={isAuthenticated ? <Navigate to="/profile"/> : <ProfilePage/>}/>
+                        <Route path="/" element={isAuthenticated ? <Navigate to="/profile"/> : <LoginPage/>}/>
+                    </Routes>
+                </main>
+                <Footer/>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
