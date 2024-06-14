@@ -1,30 +1,49 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
+import {getCurrentUser} from "../Services/UserService";
 
 const authSlice = createSlice({
-  name: 'auth',
-  initialState: {
-    isAuthenticated: false,
-    token: null,
-    user: null,
-  },
-  reducers: {
-    loginSuccess(state, action) {
-      state.isAuthenticated = true;
-      state.token = action.payload.token;
+    name: 'auth',
+    initialState: {
+        isAuthenticated: false,
+        authUser: null,
+        loading: false,
+        error: null,
     },
-    logoutSuccess(state) {
-      state.isAuthenticated = false;
-      state.token = null;
-      localStorage.removeItem('token');
+    reducers: {
+        fetchUserStart(state) {
+            state.loading = true;
+            state.error = null;
+        },
+        fetchUserSuccess(state, action) {
+            state.loading = false;
+            state.authUser = action.payload;
+        },
+        fetchUserFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        loginSuccess(state, action) {
+            state.isAuthenticated = true;
+            state.authUser = action.payload;
+        },
+        logoutSuccess(state) {
+            state.isAuthenticated = false;
+            state.authUser = null;
+        },
     },
-    userFetchSuccess(state, action) {
-      state.isAuthenticated = true;
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      localStorage.removeItem('token');
-    },
-  },
 });
 
-export const { loginSuccess, userFetchSuccess,  logoutSuccess } = authSlice.actions;
+export const {fetchUserStart, fetchUserSuccess, fetchUserFailure, loginSuccess, logoutSuccess} = authSlice.actions;
+
+export const fetchUserAction = () => async (dispatch) => {
+    dispatch(fetchUserStart());
+    try {
+        const response = await getCurrentUser();
+        const user = response.data
+        dispatch(fetchUserSuccess(user));
+    } catch (error) {
+        dispatch(fetchUserFailure(error.message));
+    }
+};
+
 export default authSlice.reducer;

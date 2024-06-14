@@ -1,29 +1,17 @@
-import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {fetchUser} from "../services/api";
+import React from 'react';
+import {useSelector} from "react-redux";
 
 const Profile = () => {
-    const navigate = useNavigate();
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                await fetchUser(token);
-            } catch (error) {
-                navigate('/login');
-            }
-        };
-        fetchUserData();
-    }, [navigate, fetchUser]);
-    // if (!userData) {
-    //     return <div>Loading...</div>;
-    // }
+    const {loading, error, authUser} = useSelector((state) => state.auth);
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error fetching user data: {error}</div>;
+
+    if (!authUser) return <div>No user data available</div>;
     return (
         <div>
-            {/*<h1>Welcome, {userData.firstName} {userData.lastName}</h1>*/}
-            {/*<p>Email: {userData.email}</p>*/}
-            {/*/!* Display other user information as needed *!/*/}
+            <h1>Welcome, {authUser.firstName} {authUser.lastName}</h1>
+            <p>Email: {authUser.email}</p>
         </div>
     );
 };
