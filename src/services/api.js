@@ -34,7 +34,7 @@ export const loginUser = async (userData) => {
 
 export const logoutUser = async () => {
     try {
-        return await api.get('/api/users/logout');
+        return await api.post('/api/users/logout');
     } catch (error) {
         if (error.response && error.response.status === 401) {
         } else if (error.message === 'JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
@@ -50,15 +50,9 @@ export const fetchUser = async() => {
     try {
         return await api.get('/api/users/me');
     } catch (error) {
-        console.error('FetchUser => data error:', error, "message", error.message);
-        if (error.response && error.response.status === 401) {
-            console.log("fetch user data error:", error);
-        } else if (error.message === 'JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
+        if (error.message === 'JSON.parse: unexpected character at line 1 column 1 of the JSON data') {
             console.error('fetchUser => JSON parse error:', error);
-        } else {
-            console.error('Fetch user data error:', error);
         }
-        throw error;
     }
 };
 
