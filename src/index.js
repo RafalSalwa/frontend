@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import store from './store/store';
-import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorBoundary from "./Components/ErrorBoundary";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {getCurrentUser} from "../Services/UserService";
+import { createSlice } from '@reduxjs/toolkit';
+import { getCurrentUser, logoutCurrentUser } from "../Services/UserService";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -33,7 +33,7 @@ const authSlice = createSlice({
     },
 });
 
-export const {fetchUserStart, fetchUserSuccess, fetchUserFailure, loginSuccess, logoutSuccess} = authSlice.actions;
+export const { fetchUserStart, fetchUserSuccess, fetchUserFailure, loginSuccess, logoutSuccess } = authSlice.actions;
 
 export const fetchUserAction = () => async (dispatch) => {
     dispatch(fetchUserStart());
@@ -44,6 +44,16 @@ export const fetchUserAction = () => async (dispatch) => {
     } catch (error) {
         dispatch(fetchUserFailure(error.message));
     }
+};
+
+export const logoutUserAction = () => async (dispatch) => {
+    try {
+        await logoutCurrentUser();
+        dispatch(logoutSuccess());
+    } catch (error) {
+        dispatch(fetchUserFailure(error.message));
+    }
+    
 };
 
 export default authSlice.reducer;
