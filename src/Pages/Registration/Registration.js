@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { registerUser } from '../../services/api';
@@ -33,7 +33,7 @@ function Registration() {
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
-        
+
 
         const previews = [];
         const names = [];
@@ -71,67 +71,66 @@ function Registration() {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6">
-                    <div className="card">
-                        <h5 className="card-header">Register</h5>
-                        <div className="card-body">
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <div className="mb-3">
-                                    <label htmlFor="firstName" className="form-label">First Name</label>
-                                    <input id="firstName" {...register('firstName')} className="form-control" />
-                                    {errors.firstName && <span className="text-danger">{errors.firstName.message}</span>}
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="lastName" className="form-label">Last Name</label>
-                                    <input id="lastName" {...register('lastName')} className="form-control" />
-                                    {errors.lastName && <span className="text-danger">{errors.lastName.message}</span>}
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">Email</label>
-                                    <input id="email" {...register('email')} className="form-control" />
-                                    {errors.email && <span className="text-danger">{errors.email.message}</span>}
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="password" className="form-label">Password</label>
-                                    <input type="password" id="password" {...register('password')} className="form-control" />
-                                    {errors.password && <span className="text-danger">{errors.password.message}</span>}
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="photos" className="form-label">Photos</label>
-                                    <input
-                                        type="file"
-                                        id="photos"
-                                        {...register('photos')}
-                                        // onChange={handleFileChange}
-                                        multiple
-                                        className="form-control"
-                                    />
+        <>
+            <h4 class="mb-2">Adventure starts here 🕸️</h4>
+            <p class="mb-4">Please sign-in to your account and start the adventure</p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="mb-3">
+                    <label htmlFor="firstName" className="form-label">First Name</label>
+                    <input id="firstName" {...register('firstName')} className="form-control" />
+                    {errors.firstName && <span className="text-danger">{errors.firstName.message}</span>}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="lastName" className="form-label">Last Name</label>
+                    <input id="lastName" {...register('lastName')} className="form-control" />
+                    {errors.lastName && <span className="text-danger">{errors.lastName.message}</span>}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input id="email" {...register('email')} className="form-control" />
+                    {errors.email && <span className="text-danger">{errors.email.message}</span>}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password" className="form-label">Password</label>
+                    <input type="password" id="password" {...register('password')} className="form-control" />
+                    {errors.password && <span className="text-danger">{errors.password.message}</span>}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="photos" className="form-label">Photos</label>
+                    <input
+                        type="file"
+                        id="photos"
+                        {...register('photos')}
+                        // onChange={handleFileChange}
+                        multiple
+                        className="form-control"
+                    />
 
-                                    {errors.photos && <span className="text-danger">{errors.photos.message}</span>}
-                                    <div>
-                                        <p>File Previews:</p>
-                                        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                                            {filePreviews.map((preview, index) => (
-                                                <div key={index} style={{ margin: '10px', textAlign: 'center' }}>
-                                                    <img key={index} src={preview} alt={`Preview ${index}`} style={{ width: '100px', height: 'auto', margin: '5px' }} />
-                                                    <p>{fileNames[index]}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    {fileNames.length > 0 && (
-                                        <button type="button" className="btn btn-sm btn-danger mt-2" onClick={handleClearFiles}>Clear Files</button>
-                                    )}
+                    {errors.photos && <span className="text-danger">{errors.photos.message}</span>}
+                    <div>
+                        <p>File Previews:</p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                            {filePreviews.map((preview, index) => (
+                                <div key={index} style={{ margin: '10px', textAlign: 'center' }}>
+                                    <img key={index} src={preview} alt={`Preview ${index}`} style={{ width: '100px', height: 'auto', margin: '5px' }} />
+                                    <p>{fileNames[index]}</p>
                                 </div>
-                                <button type="submit" className="btn btn-primary" onClick={handleSubmit(onSubmit)}>Register</button>
-                            </form>
+                            ))}
                         </div>
                     </div>
+                    {fileNames.length > 0 && (
+                        <button type="button" className="btn btn-sm btn-danger mt-2" onClick={handleClearFiles}>Clear Files</button>
+                    )}
                 </div>
-            </div>
-        </div>
+                <button type="submit" className="btn btn-primary d-grid w-100" onClick={handleSubmit(onSubmit)}>Register</button>
+            </form>
+            <p className="text-center mt-3">
+                <span>Already have an account? </span>
+                <Link to="/login"><span>Sign in instead</span></Link>
+                <a href="auth-register-basic.html">
+                </a>
+            </p>
+        </>
     );
 }
 

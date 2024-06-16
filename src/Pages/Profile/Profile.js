@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { MDBCarousel, MDBCarouselItem } from 'mdb-react-ui-kit';
 import Slider from 'react-slick';
 import CdnUtils from '../../Utils/Cdn'
 
@@ -17,21 +18,35 @@ const Profile = () => {
 
     const mainSettings = {
         asNavFor: nav2,
+        infinite: true,
         ref: slider => (slider1.current = slider),
         arrows: false,
-        fade: true,
+        slidesToShow: 1,
+        slidesToScroll: 3,
+        lazyLoad: true,
+        centerPadding: "200px",
+        centerMode: true,
+        nextArrow: (
+            <div>
+              <div className="next-slick-arrow"> ⫸ </div>
+            </div>
+          ),
+          prevArrow: (
+            <div>
+              <div className="prev-slick-arrow"> ⫷ </div>
+            </div>
+          ),
     };
 
     const thumbSettings = {
         asNavFor: nav1,
         ref: slider => (slider2.current = slider),
         slidesToShow: 5,
-        focusOnSelect: true,
+        swipeToSlide: true,
         centerMode: true,
-        infinite: true,
+    focusOnSelect: true,
         speed: 500,
         slidesToScroll: 1,
-        // autoplay: true,
         autoplaySpeed: 3000,
         pauseOnHover: true,
     };
@@ -41,16 +56,19 @@ const Profile = () => {
 
     if (!authUser) return <div>No authUser data available</div>;
     return (
-        <div className="container mt-5">
+        <div className="container">
             <div className="card">
-                <div className="card-header">
-                    <h2>{authUser.fullName || `${authUser.firstName} ${authUser.lastName}`}'s Profile</h2>
-                </div>
                 <div className="card-body">
-                    <p><strong>Email:</strong> {authUser.email}</p>
                     <div className="mt-4 slider-container">
-                    {authUser.photos && authUser.photos.length > 0 ? (
+                        {authUser.photos && authUser.photos.length > 0 ? (
                             <>
+                                {/* <MDBCarousel showControls showIndicators dark interval={3000} className="mx-auto d-block" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    {authUser.photos.map((photo, index) => (
+                                        <MDBCarouselItem key={photo.id} itemId={3 + index}>
+                                            <img src={CdnUtils.getPhotoUrl(photo.url)} className='d-block' alt='...' style={{ maxHeight: '700px', objectFit: 'cover', marginLeft: "auto", marginRight: "auto" }} />
+                                        </MDBCarouselItem>
+                                    ))}
+                                </MDBCarousel> */}
                                 <Slider {...mainSettings} className="main-slider">
                                     {authUser.photos.map((photo, index) => (
                                         <div key={index} className="text-center">
@@ -63,7 +81,8 @@ const Profile = () => {
                                         </div>
                                     ))}
                                 </Slider>
-                                <Slider {...thumbSettings} className="thumb-slider mt-3">
+                                <div className="thumbnail-wrapper">
+                                <Slider {...thumbSettings} className="thumb-slider mt-3" >
                                     {authUser.photos.map((photo, index) => (
                                         <div key={index} className="text-center">
                                             <img
@@ -75,6 +94,7 @@ const Profile = () => {
                                         </div>
                                     ))}
                                 </Slider>
+                                </div>
                             </>
                         ) : (
                             <p>No photos available</p>

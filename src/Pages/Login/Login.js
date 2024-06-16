@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from 'yup';
@@ -41,9 +41,9 @@ const Login = () => {
     };
 
     return (
-        <div className="login-form">
-            <div className="login-form-container">
-                <h2>Login</h2>
+        <>
+        <h4 className="mb-2">Adventure starts here 🚀</h4>
+            <p className="mb-4">Please sign-in to your account and start the adventure</p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
@@ -55,10 +55,15 @@ const Login = () => {
                         <input type="password" id="password" {...register('password')} className="form-control" />
                         {errors.password && <span className="text-danger">{errors.password.message}</span>}
                     </div>
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <button type="submit" className="btn btn-primary d-grid w-100">Login</button>
                 </form>
-            </div>
-        </div>
+                <p className="text-center mt-3">
+                <span>New on our platform? </span>
+                <Link to="/register"><span>Create an account</span></Link>
+                <a href="auth-register-basic.html">
+                </a>
+            </p>
+            </>
     );
 }
 
